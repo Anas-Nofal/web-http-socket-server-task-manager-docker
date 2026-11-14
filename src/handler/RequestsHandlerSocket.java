@@ -15,14 +15,28 @@ public class RequestsHandlerSocket implements Runnable {
         this.socket = socket;
     }
 
+
     @Override
     public void run() {
+        String threadName = Thread.currentThread().getName();
+        long startTime = System.currentTimeMillis();
+
+        System.out.println("[START] Request is being handled by: "
+                + threadName);
+
         try {
             handle();
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            long executionTime = System.currentTimeMillis() - startTime;
+
+            System.out.println("[END] Request handled by: "
+                    + threadName
+                    + " | Time: " + executionTime + " ms");
         }
     }
+
 
     private void handle() throws IOException {
         DataOutputStream out = new DataOutputStream(socket.getOutputStream());

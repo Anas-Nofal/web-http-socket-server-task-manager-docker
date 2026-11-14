@@ -1,18 +1,14 @@
-FROM openjdk:8-jdk-alpine
+
+FROM eclipse-temurin:8-jdk-alpine
 
 LABEL maintainer="Wagner Franchin"
 
-ENV WEBPATH=/webserver/
-ENV WEBSERVER="WebServerSocket"
+WORKDIR /webserver
 
-RUN apk update && apk add ca-certificates wget && update-ca-certificates
+COPY src/ .
 
-RUN mkdir -p $WEBPATH
-COPY src/ $WEBPATH
-WORKDIR $WEBPATH
-
-RUN javac *.java task/*.java
+RUN mkdir -p out && javac -d out WebServerSocket.java WebServerHttp.java handler/*.java singleton/*.java task/*.java
 
 EXPOSE 8000
 
-CMD java $WEBSERVER
+CMD ["java", "-cp", "out", "WebServerSocket"]

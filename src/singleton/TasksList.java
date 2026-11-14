@@ -1,19 +1,21 @@
+
 package singleton;
 
 import task.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public enum TasksList {
 
-    //Singleton
+    // Singleton
     INSTANCE;
 
     private List<Task> tasks;
 
     TasksList() {
-        tasks = new ArrayList<>();
+        tasks = Collections.synchronizedList(new ArrayList<>());
     }
 
     public void add(Task task) {
@@ -22,7 +24,11 @@ public enum TasksList {
 
     public String list() {
         StringBuilder stringBuilder = new StringBuilder();
-        tasks.forEach(task -> stringBuilder.append(task));
+
+        synchronized (tasks) {
+            tasks.forEach(task -> stringBuilder.append(task));
+        }
+
         return stringBuilder.toString();
     }
 }

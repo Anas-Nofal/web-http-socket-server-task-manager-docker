@@ -29,11 +29,12 @@ public enum TaskExecutor {
         Task task = createTask(taskName);
         task.setInput(input);
         task.execute();
+        long end = System.currentTimeMillis();
+        String executedTime = new DecimalFormat("#0.00")
+                .format((end - start) / 1000d) + "s";
+        task.setExecutedTime(executedTime);
 
         TasksList.INSTANCE.add(task);
-        long end = System.currentTimeMillis();
-        String executedTime = new DecimalFormat("#0.00").format((end - start) / 1000d) + "s";
-        task.setExecutedTime(executedTime);
 
         return task.getResult();
     }
